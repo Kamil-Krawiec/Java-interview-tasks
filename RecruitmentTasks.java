@@ -1,6 +1,7 @@
 package Interview;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class RecruitmentTasks {
@@ -130,27 +131,27 @@ public class RecruitmentTasks {
 
 //    ------------------------------------------------------------------------------
 
-    public int[] quicksort(int[] arr){
-        quicksort_helper(arr,0,arr.length-1);
+    public int[] quicksort(int[] arr) {
+        quicksort_helper(arr, 0, arr.length - 1);
         return arr;
     }
 
-    private void quicksort_helper(int[] arr,int beg, int end){
-        if(end>beg){
-            int participate = quicksort_participate(arr,beg,end);
+    private void quicksort_helper(int[] arr, int beg, int end) {
+        if (end > beg) {
+            int participate = quicksort_participate(arr, beg, end);
 
-            quicksort_helper(arr,beg,participate-1);
-            quicksort_helper(arr,participate+1,end);
+            quicksort_helper(arr, beg, participate - 1);
+            quicksort_helper(arr, participate + 1, end);
         }
 
     }
 
-    private int quicksort_participate(int[] arr, int beg, int end){
+    private int quicksort_participate(int[] arr, int beg, int end) {
         int pivot = arr[end];
-        int border = beg-1;
+        int border = beg - 1;
 
-        for(int j=beg;j<end;j++){
-            if(pivot>=arr[j]){
+        for (int j = beg; j < end; j++) {
+            if (pivot >= arr[j]) {
                 border++;
 
                 int tempSwap = arr[j];
@@ -159,7 +160,7 @@ public class RecruitmentTasks {
 
             }
         }
-        int index = border+1;
+        int index = border + 1;
         arr[end] = arr[index];
         arr[index] = pivot;
 
@@ -167,38 +168,82 @@ public class RecruitmentTasks {
     }
 
 //    ------------------------------------------------------------------------------
-    public int[] insert_sort(int[] arr){
-        for(int i=1;i<arr.length;i++){
+    public int[] insert_sort(int[] arr) {
+        for (int i = 1; i < arr.length; i++) {
             int key = arr[i];
-            int j=i-1;
+            int j = i - 1;
 
-            while(j>=0 && arr[j]>key){
-                arr[j+1]=arr[j];
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
                 j--;
             }
-            arr[j+1]=key;
+            arr[j + 1] = key;
         }
 
         return arr;
     }
 
 //    ------------------------------------------------------------------------------
-    public int[] bubble_sort(int[] arr){
+    public int[] bubble_sort(int[] arr) {
         int n = arr.length;
-        do{
+        do {
 
-            for(int i=0;i<n-1;i++){
-                if(arr[i]>arr[i+1]){
+            for (int i = 0; i < n - 1; i++) {
+                if (arr[i] > arr[i + 1]) {
                     int temp = arr[i];
-                    arr[i] = arr[i+1];
-                    arr[i+1]=temp;
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = temp;
                 }
             }
 
-        }while(--n>1);
+        } while (--n > 1);
 
         return arr;
     }
 
+//    ------------------------------------------------------------------------------
 
+    public String moveTen(String s) {
+        char[] char_arr = s.toCharArray();
+
+        for (int i = 0; i < s.length(); i++) {
+            int new_letter;
+            int moved_letter = char_arr[i] + 10;
+
+            if (Character.isUpperCase(char_arr[i])) {
+                new_letter = moved_letter > 90 ? 64 + moved_letter % 90 : char_arr[i] + 10;
+            } else {
+                new_letter = moved_letter > 122 ? 96 + moved_letter % 122 : char_arr[i] + 10;
+            }
+            char_arr[i] = (char) new_letter;
+        }
+
+        System.out.println(char_arr);
+        return Arrays.toString(char_arr);
+    }
+
+//    ------------------------------------------------------------------------------
+
+    public static char triangle(final String row) {
+        HashMap<String,Character> dict = new HashMap<>();
+        dict.put("GG",'G');
+        dict.put("RR",'R');
+        dict.put("BB",'B');
+        dict.put("RG",'B');
+        dict.put("GR",'B');
+        dict.put("BR",'G');
+        dict.put("RB",'G');
+        dict.put("BG",'R');
+        dict.put("GB",'R');
+        return helper(row.toCharArray(), row.length(),dict);
+    }
+    public static char helper(char[] arr, int counter, HashMap<String,Character> dict){
+        if(counter==1) return arr[0];
+        else{
+            for(int i=1;i<counter;i++){
+                arr[i-1] = dict.get(String.valueOf(arr[i]) + arr[i - 1]);
+            }
+            return helper(arr,counter-1,dict);
+        }
+    }
 }
