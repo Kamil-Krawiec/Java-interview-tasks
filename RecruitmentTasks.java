@@ -1,5 +1,7 @@
 package Interview;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -75,11 +77,11 @@ public class RecruitmentTasks {
 //    ------------------------------------------------------------------------------
 
     public String reverse_string(String word) {
-        String reversed_str = "";
+        StringBuilder reversed_str = new StringBuilder();
         for (int i = word.length() - 1; i >= 0; i--) {
-            reversed_str += word.charAt(i);
+            reversed_str.append(word.charAt(i));
         }
-        return reversed_str;
+        return reversed_str.toString();
     }
 
 //    ------------------------------------------------------------------------------
@@ -167,7 +169,7 @@ public class RecruitmentTasks {
         return index;
     }
 
-//    ------------------------------------------------------------------------------
+    //    ------------------------------------------------------------------------------
     public int[] insert_sort(int[] arr) {
         for (int i = 1; i < arr.length; i++) {
             int key = arr[i];
@@ -183,7 +185,7 @@ public class RecruitmentTasks {
         return arr;
     }
 
-//    ------------------------------------------------------------------------------
+    //    ------------------------------------------------------------------------------
     public int[] bubble_sort(int[] arr) {
         int n = arr.length;
         do {
@@ -224,26 +226,103 @@ public class RecruitmentTasks {
 
 //    ------------------------------------------------------------------------------
 
-    public static char triangle(final String row) {
-        HashMap<String,Character> dict = new HashMap<>();
-        dict.put("GG",'G');
-        dict.put("RR",'R');
-        dict.put("BB",'B');
-        dict.put("RG",'B');
-        dict.put("GR",'B');
-        dict.put("BR",'G');
-        dict.put("RB",'G');
-        dict.put("BG",'R');
-        dict.put("GB",'R');
-        return helper(row.toCharArray(), row.length(),dict);
+    public char triangle(final String row) {
+        HashMap<String, Character> dict = new HashMap<>();
+        dict.put("RG", 'B');
+        dict.put("GR", 'B');
+        dict.put("BR", 'G');
+        dict.put("RB", 'G');
+        dict.put("BG", 'R');
+        dict.put("GB", 'R');
+        return helper_triangle(row.toCharArray(), row.length(), dict);
     }
-    public static char helper(char[] arr, int counter, HashMap<String,Character> dict){
-        if(counter==1) return arr[0];
-        else{
-            for(int i=1;i<counter;i++){
-                arr[i-1] = dict.get(String.valueOf(arr[i]) + arr[i - 1]);
+
+    private char helper_triangle(char[] arr, int counter, HashMap<String, Character> dict) {
+        if (counter == 1) return arr[0];
+        else {
+            for (int i = 1; i < counter; i++) {
+                arr[i - 1] = arr[i] == arr[i - 1] ? arr[i] : dict.get(String.valueOf(arr[i]) + arr[i - 1]);
             }
-            return helper(arr,counter-1,dict);
+
+            return helper_triangle(arr, counter - 1, dict);
         }
     }
+
+//    ------------------------------------------------------------------------------
+    public void printPermutn(String str, String ans) {
+
+        if (str.length() == 0) {
+            System.out.print(ans + " ");
+            return;
+        }
+
+        for (int i = 0; i < str.length(); i++) {
+
+            char ch = str.charAt(i);
+
+            String ros = str.substring(0, i) + str.substring(i + 1);
+
+            printPermutn(ros, ans + ch);
+        }
+
+    }
+
+//    ------------------------------------------------------------------------------
+
+    public int[] mergesort(int[] arr){
+        return mergesort_helper(arr,0,arr.length-1);
+    }
+
+    private int[] mergesort_helper(int[] arr, int l, int r){
+        if(l<r){
+            int m = (l+r)/2;
+            mergesort_helper(arr,l,m);
+            mergesort_helper(arr,m+1,r);
+            merge(arr, l, m, r);
+        }
+        return arr;
+    }
+
+    private void merge(int[] arr, int l, int m, int r) {
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+
+        int[] L = new int[n1];
+        int[] R = new int[n2];
+
+
+        System.arraycopy(arr, l, L, 0, n1);
+        System.arraycopy(arr, m+1, R, 0, n2);
+
+        int i = 0, j = 0;
+
+        int k = l;
+        while (i < n1 && j < n2) {
+            if (L[i] <= R[j]) {
+                arr[k] = L[i];
+                i++;
+            }
+            else {
+                arr[k] = R[j];
+                j++;
+            }
+            k++;
+        }
+
+        /* Copy remaining elements of L[] if any */
+        while (i < n1) {
+            arr[k] = L[i];
+            i++;
+            k++;
+        }
+
+        /* Copy remaining elements of R[] if any */
+        while (j < n2) {
+            arr[k] = R[j];
+            j++;
+            k++;
+        }
+    }
+
 }
